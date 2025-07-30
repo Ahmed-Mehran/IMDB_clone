@@ -22,7 +22,7 @@ from watchlist_app.api.throttling import ReviewDetailsThrottle, ReviewListThrott
 
 class StreamPlatformAV(APIView):   ## View for accesing all stream platform like netflix, prime vids
     
-    permission_classes = [AdminOrReadOnly] 
+    # permission_classes = [AdminOrReadOnly] 
     
     def get(self, request):
         
@@ -50,7 +50,7 @@ class StreamPlatformAV(APIView):   ## View for accesing all stream platform like
         
 class StreamPlatformDetailsAV(APIView):   ## View for accesing stream platform individually
     
-    permission_classes = [AdminOrReadOnly] 
+    # permission_classes = [AdminOrReadOnly] 
     
     def get(self, request, pk):
         
@@ -92,7 +92,7 @@ class StreamPlatformDetailsAV(APIView):   ## View for accesing stream platform i
 
 
 class WatchListAV(APIView):
-    permission_classes = [AdminOrReadOnly] 
+    # permission_classes = [AdminOrReadOnly] 
     
     def get(self, request):
         
@@ -121,7 +121,7 @@ class WatchListAV(APIView):
         
 class WatchDetailAV(APIView):
     
-    permission_classes = [AdminOrReadOnly] 
+    # permission_classes = [AdminOrReadOnly] 
     
     def get(self, request, pk):
         
@@ -161,7 +161,7 @@ class WatchDetailAV(APIView):
 
 class ReviewListAV(APIView):  
     
-    permission_classes = [IsAuthenticated] 
+    # permission_classes = [IsAuthenticated] 
   
  #   throttle_classes = [ReviewListThrottle]
     
@@ -218,7 +218,7 @@ class ReviewListAV(APIView):
 
 class ReviewDetailsAV(APIView):
 
-    permission_classes = [IsUserOrAdminOnly, IsAuthenticated]
+    # permission_classes = [IsUserOrAdminOnly, IsAuthenticated]
     
    # throttle_classes = [ReviewDetailsThrottle]
     
