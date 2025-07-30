@@ -7,3 +7,6 @@ This is added part of new branch which is named as new_branch VERSION 1
 This is added part of main which is MAIN 1
 
 This is added part of new branch which is named as new_branch VERSION 2
+
+
+THIS IS SECOND BRANCH VERSION 1
