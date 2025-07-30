@@ -3,3 +3,5 @@ This project is a REST API developed using Django Rest Framework (DRF) that faci
 This is added part of new branch which is named as new_branch 
 
 This is added part of new branch which is named as new_branch VERSION 1
+
+This is added part of main which is MAIN 1
