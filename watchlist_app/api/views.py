@@ -18,6 +18,11 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from watchlist_app.api.throttling import ReviewDetailsThrottle, ReviewListThrottle
 
+## SQL ALCHEMY IMPORTS
+
+
+from database import session
+
 
 
 class StreamPlatformAV(APIView):   ## View for accesing all stream platform like netflix, prime vids
@@ -26,25 +31,39 @@ class StreamPlatformAV(APIView):   ## View for accesing all stream platform like
     
     def get(self, request):
         
-        platform = StreamPlatform.objects.all()
+        # platform = StreamPlatform.objects.all()
+        platform  = session.query(StreamPlatform).all()  # Using SQLAlchemy session to query all StreamPlatform items
         
         serializer = StreamPlatformSerializer(platform, many=True)
         
         return Response(serializer.data)
     
+    # def post(self, request):
+        
+    #     serializer = StreamPlatformSerializer(data=request.data)
+        
+    #     if serializer.is_valid():
+            
+    #         serializer.save()
+            
+    #         return Response(serializer.data)
+        
+    #     else:
+            
+    #         return Response(serializer.errors)
+
+
+    ## modified to work with SQLAlchemy    
     def post(self, request):
-        
-        serializer = StreamPlatformSerializer(data=request.data, )
-        
+
+        serializer = StreamPlatformSerializer(data=request.data)
+
         if serializer.is_valid():
-            
             serializer.save()
-            
-            return Response(serializer.data)
+
+            return Response(serializer.data, status=201)
         
-        else:
-            
-            return Response(serializer.errors)
+        return Response(serializer.errors, status=400)
         
         
         
@@ -54,15 +73,19 @@ class StreamPlatformDetailsAV(APIView):   ## View for accesing stream platform i
     
     def get(self, request, pk):
         
-        platform_detail = StreamPlatform.objects.get(pk=pk)
+        # platform_detail = StreamPlatform.objects.get(pk=pk)
         
+        platform_detail = session.query(StreamPlatform).get(pk)  # Using SQLAlchemy session to get a specific StreamPlatform item
+
         serializer = StreamPlatformSerializer(platform_detail)
         
         return Response(serializer.data)
     
     def put(self, request, pk):
         
-        platform_detail = StreamPlatform.objects.get(pk=pk)
+        # platform_detail = StreamPlatform.objects.get(pk=pk)
+
+        platform_detail = session.query(StreamPlatform).get(pk)  
         
         serializer = StreamPlatformSerializer(platform_detail, data=request.data)
         
@@ -77,13 +100,29 @@ class StreamPlatformDetailsAV(APIView):   ## View for accesing stream platform i
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         
+    # def delete(self, request, pk):
+        
+    #     platform_detail = StreamPlatform.objects.get(pk=pk)
+
+    #     platform_detail = session.query(StreamPlatform).get(pk) 
+        
+    #     platform_detail.delete()
+        
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+    ## The above is not the right way to delete in SQLAlchemy, so we modify it below
     def delete(self, request, pk):
+
+        platform_detail = session.query(StreamPlatform).get(pk)
         
-        platform_detail = StreamPlatform.objects.get(pk=pk)
+        if not platform_detail:
+            return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        platform_detail.delete()
+        session.delete(platform_detail)   # ✅ Correct way
+        session.commit()
         
         return Response(status=status.HTTP_204_NO_CONTENT)
+
         
         
         
@@ -96,7 +135,9 @@ class WatchListAV(APIView):
     
     def get(self, request):
         
-        films = WatchList.objects.all()
+        #films = WatchList.objects.all()
+
+        films = session.query(WatchList).all()  # Using SQLAlchemy session to query all WatchList items
         
         serializer = WatchListSerializer(films, many=True)
         
@@ -125,8 +166,10 @@ class WatchDetailAV(APIView):
     
     def get(self, request, pk):
         
-        film = WatchList.objects.get(pk=pk)  
+        #film = WatchList.objects.get(pk=pk)  
                 
+        film = session.query(WatchList).get(pk)  # Using SQLAlchemy session to get a specific WatchList item
+
         serializer = WatchListSerializer(film)
 
         return Response(serializer.data)
@@ -134,7 +177,9 @@ class WatchDetailAV(APIView):
     
     def put(self, request, pk):
         
-        film = WatchList.objects.get(pk=pk)  
+        # film = WatchList.objects.get(pk=pk)  
+
+        film = session.query(WatchList).get(pk)  # Using SQLAlchemy session to get a specific WatchList item
         
         serializer = WatchListSerializer(film, data=request.data)
         
@@ -148,12 +193,14 @@ class WatchDetailAV(APIView):
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        
+
+
     def delete(self, request, pk):
     
-        film = WatchList.objects.get(pk=pk)
+        film = session.query(WatchList).get(pk)
         
-        film.delete()
+        session.delete(film)  # Using SQLAlchemy session to delete the specific WatchList item
+        session.commit()  # Commit the transaction to persist the deletion
         
         return Response(status=status.HTTP_204_NO_CONTENT)
         
