@@ -34,7 +34,7 @@ class StreamPlatformAV(APIView):   ## View for accesing all stream platform like
     
     def post(self, request):
         
-        serializer = StreamPlatformSerializer(data=request.data, )
+        serializer = StreamPlatformSerializer(data=request.data)
         
         if serializer.is_valid():
             
