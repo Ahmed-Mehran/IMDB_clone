@@ -12,3 +12,5 @@ This is added part of new branch which is named as new_branch VERSION 2
 THIS IS SECOND BRANCH VERSION 1
 
 THIS IS 3rd BRANCH VERSION 1
+
+THIS IS DELETE BRANCH VERSION 1
